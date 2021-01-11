@@ -11,7 +11,7 @@ $('#submit').click(function() {
     $('#submit').css('cursor', 'not-allowed');
     $('#submit').css('color', '#222');
     $('#submit').prop('disabled', true);
-    $.ajax('/data.php?competition_id='+competition, {
+    $.ajax('/get-data?competition_id='+competition, {
     type: 'GET',  success: function(result) {
         $('#submit').text('Submit');
         $('#submit').css('cursor', 'pointer');
@@ -26,7 +26,7 @@ $('#submit').click(function() {
             } else {
                 gamesWithProfit.forEach(function(game) {
                     var $html = '<table class="uk-table uk-table-divider uk-table-middle uk-table-justify my-game">';
-                    
+
                     $('#t-wrapper').append($html);
                 });
             }

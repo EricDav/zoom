@@ -1,10 +1,16 @@
 <?php
     $subPath = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? '/riskless' : '';
+    $url = explode('?', $_SERVER['REQUEST_URI'])[0];
 
     $competitions = array(
         1 => 'Zoom Premier League',
         2 => 'Zoom Laliga',
     );
+
+    if ($url == 'get-data') {
+        include_once 'data.php';
+        exit;
+    }
 ?>
 
 
