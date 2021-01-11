@@ -7,7 +7,7 @@
         2 => 'Zoom Laliga',
     );
 
-    if ($url == 'get-data') {
+    if ($url == '/get-data') {
         include_once 'data.php';
         exit;
     }
