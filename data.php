@@ -28,7 +28,8 @@
     
             try {
                 $datum = $pdo->query($sql)->fetchAll();
-                $datum['fixture'] = $fixture->home . ' - ' . $fixture->away;
+                $datum = array('stat' => $datum, 'fixture' => $fixture->home . ' - ' . $fixture->away);
+                // $datum['fixture'] = $fixture->home . ' - ' . $fixture->away;
             } catch(Exception $e) {
                 jsonResponse(['message' => 'Server error', 'success' => false], 500);
             }
