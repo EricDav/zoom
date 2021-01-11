@@ -1,6 +1,15 @@
 <?php
     $subPath = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? '/riskless' : '';
     $url = explode('?', $_SERVER['REQUEST_URI'])[0];
+    $home = '1';
+    $away = '2';
+    $homeWinDraw = '1X';
+    $draw = 'X';
+    $awayWinDraw = 'X2';
+    $anybody = '12';
+    $over2 = 'Over 2.5';
+    $under2 = 'Under 2.5';
+
     include_once 'data.php';
 
     $competitions = array(
@@ -13,19 +22,7 @@
         exit;
     }
 
-    // $data = json_decode(file_get_contents('data.json'));
-
-    // foreach($data as $d) {
-    //     $fixt = 'Z.Brighton - Z.Wolves';
-    //     var_dump($d->$fixt);
-    //     exit;
-    // }
-
-    // exit;
-
-    // var_dump($data); exit;
-
-
+    $data = getData();
 ?>
 
 
@@ -93,12 +90,13 @@
                   
                   <button id="submit" type="button" class="uk-button uk-button-secondary uk-width-1-1 uk-margin-small-bottom">Submit</button>
                 <div class="accordion" id="accordionExample">
-
+                <?php $counter = 0; ?>
                 <?php foreach($data as $d): ?>
+            
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
+                        <h2 class="accordion-header" id="<?="headingOne" . $counter ?>">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Accordion Item #1
+                            <td><?=$d->fixture?></td>
                         </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -120,25 +118,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Z.Brighton - Wolves</td>
-                                    <td>2.52</td>
-                                    <td>2.52</td>
-                                    <td>2.52</td>
-                                    <td>2.52</td>
-                                    <td>2.52</td>
-                                    <td>2.52</td>
-                                    <td>1.23</td>
-                                    <td>2.35</td>
-                                    <td>1-0</td>
-                                    <td>2-3</td>
-                                </tr>
+                                <?php foreach($d->stat as $stat): ?>
+                                    <tr>
+                                        <td><?=$stat->home . ' - ' . $stat->away?></td>
+                                        <td><?=$stat->$home?></td>
+                                        <td><?=$stat->$draw?></td>
+                                        <td><?=$stat->$away?></td>
+                                        <td><?=$stat->$homeWinDraw?></td>
+                                        <td><?=$stat->$anybody?></td>
+                                        <td><?=$stat->$awayWinDraw?></td>
+                                        <td><?=$stat->$over2?></td>
+                                        <td><?=$stat->$under2?></td>
+                                        <td><?=$stat->ht_score?></td>
+                                        <td><?=$stat->ft_score?></td>
+                                    </tr>
+                                <?php endforeach; ?>
                                 
                             </tbody>
                         </table>
                         </div>
                         </div>
                     </div>
+                    <?php $counter+=1; ?>
+                    
                     <?php endforeach; ?>
 
                 </div>
