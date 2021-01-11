@@ -1,6 +1,7 @@
 <?php
     $subPath = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? '/riskless' : '';
     $url = explode('?', $_SERVER['REQUEST_URI'])[0];
+    include_once 'data.php';
 
     $competitions = array(
         1 => 'Zoom Premier League',
@@ -8,9 +9,23 @@
     );
 
     if ($url == '/get-data') {
-        include_once 'data.php';
+        include_once 'api-get-data.php';
         exit;
     }
+
+    // $data = json_decode(file_get_contents('data.json'));
+
+    // foreach($data as $d) {
+    //     $fixt = 'Z.Brighton - Z.Wolves';
+    //     var_dump($d->$fixt);
+    //     exit;
+    // }
+
+    // exit;
+
+    // var_dump($data); exit;
+
+
 ?>
 
 
@@ -62,13 +77,6 @@
                      </thead>
                      <tbody>
                         <tr>
-                           <!-- <td>
-                              <a style="color: #e41827;" href="https://www.sportybet.com/" _target="blank"><span class="platform-title"><b>SportyBet |</b></span></a>
-                              <a style="color: #1c813d;"  href="https://www.bet9ja.com/"><span class="platform-title"><b>Bet9ja |</b></span></a>
-                              <a style="color: #062064;"  href="https://www.betking.com/"><span class="platform-title"><b>Betking |</b></span></a>
-                              <a style="color: rgb(1, 59, 229);"  href="https://www.nairabet.com/"><span class="platform-title"><b>Nairabet |</b></span></a>
-                              <a style="color: #2073b0;"  href="https://www.1xbet.com/"><span class="platform-title"><b>1xbet</b></span></a>
-                           </td> -->
                            <td>
                                <select id="competition" type="text" class="uk-input">
                                    <option value="0">-- Select Competition --</option>
@@ -79,11 +87,63 @@
                             </td>
                            <!-- <td><input id="amount" type="text" class="uk-input" placeholder="0"></td> -->
                         </tr>
+                        
                      </tbody>
                   </table>
+                  
                   <button id="submit" type="button" class="uk-button uk-button-secondary uk-width-1-1 uk-margin-small-bottom">Submit</button>
-                  <h4 id="empty">No available fixture with profit. Try another time or anther competition.</h4>
+                <div class="accordion" id="accordionExample">
+
+                <?php foreach($data as $d): ?>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Accordion Item #1
+                        </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                        <table class="uk-table uk-table-divider uk-table-middle uk-table-justify">
+                            <thead>
+                                <tr>
+                                    <th class="">Fixture</th>
+                                    <th class="">1</th>
+                                    <th class="">X</th>
+                                    <th class="">2</th>
+                                    <th class="">1x</th>
+                                    <th class="">12</th>
+                                    <th class="">X2</th>
+                                    <th class="">Over 2.5</th>
+                                    <th class="">Under 2.5</th>
+                                    <th class="">HT Score</th>
+                                    <th class="">FT Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Z.Brighton - Wolves</td>
+                                    <td>2.52</td>
+                                    <td>2.52</td>
+                                    <td>2.52</td>
+                                    <td>2.52</td>
+                                    <td>2.52</td>
+                                    <td>2.52</td>
+                                    <td>1.23</td>
+                                    <td>2.35</td>
+                                    <td>1-0</td>
+                                    <td>2-3</td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+
+                </div>
             </div>
+            
          </div>
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
