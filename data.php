@@ -26,7 +26,7 @@
         $sql = 'SELECT * FROM fixtures INNER JOIN odds ON fixtures.id = odds.fixtures_id INNER JOIN results ON fixtures.id = results.fixtures_id WHERE fixtures.home =' . "'" . $fixture->home . "'" . ' AND fixtures.away = ' . "'" . $fixture->away . "'" . ' OR fixtures.home = ' . "'" . $fixture->away . "'" . ' AND fixtures.away = ' . "'" . $fixture->home . "'";
 
         try {
-            $datum = $pdo->query($sql);
+            $datum = $pdo->query($sql)->fetchAll();
         } catch(Exception $e) {
             jsonResponse(['message' => 'Server error', 'success' => false], 500);
         }
