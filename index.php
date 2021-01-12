@@ -23,6 +23,7 @@
     }
 
     $data = getData();
+    var_dump($data); exit;
 ?>
 
 
