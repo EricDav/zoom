@@ -22,8 +22,9 @@
         exit;
     }
 
-    $data = (object)getData();
-    var_dump($data);
+    $data = getData();
+
+   // var_dump($data);
 ?>
 
 
@@ -97,7 +98,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="<?="headingOne" . $counter ?>">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <td><?=$d->fixture?></td>
+                            <td><?=$d['fixture']?></td>
                         </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -119,19 +120,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach($d->stat as $stat): ?>
+                                <?php foreach($d['stat'] as $stat): ?>
                                     <tr>
-                                        <td><?=$stat->home . ' - ' . $stat->away?></td>
-                                        <td><?=$stat->$home?></td>
-                                        <td><?=$stat->$draw?></td>
-                                        <td><?=$stat->$away?></td>
-                                        <td><?=$stat->$homeWinDraw?></td>
-                                        <td><?=$stat->$anybody?></td>
-                                        <td><?=$stat->$awayWinDraw?></td>
-                                        <td><?=$stat->$over2?></td>
-                                        <td><?=$stat->$under2?></td>
-                                        <td><?=$stat->ht_score?></td>
-                                        <td><?=$stat->ft_score?></td>
+                                        <td><?=$stat['home'] . ' - ' . $stat['away']?></td>
+                                        <td><?=$stat[$home]?></td>
+                                        <td><?=$stat[$draw]?></td>
+                                        <td><?=$stat[$away]?></td>
+                                        <td><?=$stat[$homeWinDraw]?></td>
+                                        <td><?=$stat[$anybody]?></td>
+                                        <td><?=$stat[$awayWinDraw]?></td>
+                                        <td><?=$stat[$over2]?></td>
+                                        <td><?=$stat[$under2]?></td>
+                                        <td><?=$stat['ht_score']?></td>
+                                        <td><?=$stat['ft_score']?></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 
