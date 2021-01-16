@@ -32,8 +32,8 @@
                 $datum = $pdo->query($sql)->fetchAll();
                 foreach($datum as $d) {
                     if ($d['home'] == $fixture->home && $d['away'] == $fixture->away) {
-                        $d['GG'] = $fixture->$GG;
-                        $d['NG'] = $fixture->$NG;
+                        $d['GG'] = $fixture->odds->$GG;
+                        $d['NG'] = $fixture->odds->$NG;
                     }
                 }
                 $datum = array('stat' => $datum, 'fixture' => $fixture->home . ' - ' . $fixture->away);
