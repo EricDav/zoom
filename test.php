@@ -5,8 +5,8 @@
    include 'Statistics.php';
    include 'Game.php';
 
-    $data = json_decode(file_get_contents('s-data.json'))->data;
-
+   $data = json_decode(file_get_contents('s-data.json'))->data;
+    var_dump($data); exit;
 
    $r = new Statistics($data);
    $r->loadAllStat();

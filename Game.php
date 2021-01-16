@@ -15,6 +15,8 @@
             } else {
                 $this->options = [$option];
             }
+
+            $this->probability = $this->getProbabilityStat();
         }
 
         public function isFixtureAlreadyExist($options, $fixture) {
@@ -37,7 +39,9 @@
         public function addOption(Option $option) {
             if (!$this->isFixtureAlreadyExist($options, $option->fixture)) {
                 array_push($this->options, $option);
+                $this->probability = $this->getProbabilityStat();
             }
+
         }
 
         public function getOdd() {

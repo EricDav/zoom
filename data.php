@@ -18,9 +18,16 @@
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //turn on errors in the form of exceptions
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
             ];
-        
-            $pdo = new PDO('mysql:host=localhost;port=3306;dbname=wiseinve_zoom', 'wiseinve_investment', 'Iloveodunayo123', $options);
+
+            $host = explode(':', $_SERVER['HTTP_HOST'])[0];
+
+            if ($host == 'localhost') {
+                $pdo = new PDO('mysql:host=localhost;port=8889;dbname=zoom', 'root', 'root', $options);
+            } else {
+                $pdo = new PDO('mysql:host=localhost;port=3306;dbname=wiseinve_zoom', 'wiseinve_investment', 'Iloveodunayo123', $options);
+            }
         } catch(Exception $e) {
+            echo $e->getMessage();
            mail('pythonboss123@gmail.com', 'Zoom Cron Job Report', 'Database connection error: ' . $e->getMessage());
            exit(0);
         }

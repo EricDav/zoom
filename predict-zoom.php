@@ -4,30 +4,32 @@
    include 'Statistics.php';
    include 'Game.php';
 
-   $data = array('data' => $data, 'success' => true);
-   $data = json_decode(json_encode($data))->data;
-   //$data = json_decode(file_get_contents('s-data.json'))->data;
-
    $minOdd = $_GET['min_odd'];
    $maxOdd = $_GET['max_odd'];
    $minMatches = $_GET['min_match'];
    $maxMatches = $_GET['max_match'];
 
-   if (!is_numeric($minOdd) || !is_numeric($maxOdd) || is_numeric(!$minMatches) || !is_numeric(!$maxMatches)) {
+   if (!is_numeric($minOdd) || !is_numeric($maxOdd) || !is_numeric($minMatches) || !is_numeric($maxMatches)) {
        jsonResponse(array('success' => false, 'message' => 'One or more of the parameteres is invalid'), 400);
    }
+
+
+   $data = getData();
+   $data = array('data' => $data, 'success' => true);
+   $data = json_decode(json_encode($data))->data;
+    
 
    $r = new Statistics($data);
    $r->loadAllStat();
    $stats = $r->stat;
    $games = [];
 
-   for ($i = $minOdd; $i <= $maxOdd; $i++) {
+   for ($i = $minMatches; $i <= $maxMatches; $i++) {
         $matchesCominations = getDynamicMatchesCombination($stats, $i);
         foreach($matchesCominations as $matchComb) {
             $game = new Game($matchComb);
 
-            if ($game->getProbabilityStat() >= 0.8 && $game->getOdd() >= 3.0 && $game->getOdd() < 4) {
+            if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= $minOdd && $game->getOdd() < $maxOdd) {
                 array_push($games, $game);
             }
         }
@@ -35,7 +37,7 @@
 
    $bestGame = getBestGame($games); 
    
-   jsonResponse(array('success' => true, 'data' => $bestGame), 200);
+   jsonResponse(array('success' => true, 'data' => $games), 200);
 
 
    function getBestGame($games) {
@@ -46,6 +48,7 @@
               $bestGame = $game;
           }
       }
+
       return $game;
    }
 
