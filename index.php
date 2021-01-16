@@ -10,7 +10,7 @@
     $anybody = '12';
     $over2 = 'Over 2.5';
     $under2 = 'Under 2.5';
-    
+
 
     include_once 'data.php';
 
@@ -22,7 +22,7 @@
     if ($url == '/get-data') {
         include_once 'api-get-data.php';
         exit;
-    } else if ($url == 'predict-zoom') {
+    } else if ($url == '/predict-zoom') {
         include_once 'test.php';
     }
 
