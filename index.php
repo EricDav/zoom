@@ -23,7 +23,7 @@
         include_once 'api-get-data.php';
         exit;
     } else if ($url == '/predict-zoom') {
-        include_once 'test.php';
+        include_once 'predict-zoom.php';
     }
 
 
