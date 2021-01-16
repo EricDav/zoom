@@ -1,6 +1,4 @@
 <?php
-    $GG = "GG";
-    $NG = "NG";
     function jsonResponse($responseData, $status) {
         header('Content-Type: application/json');
         header("HTTP/1.0 " . $status . " ");
@@ -9,6 +7,8 @@
     }
 
     function getData() {
+        $GG = "GG";
+        $NG = "NG";
         $fixtures = json_decode(file_get_contents('https://bet-odds.herokuapp.com/zoom-fixtures?country=england'))->data;
 
         $data = array();
