@@ -37,7 +37,7 @@
 
    $bestGame = getBestGame($games); 
    
-   jsonResponse(array('success' => true, 'data' => $games), 200);
+   jsonResponse(array('success' => true, 'data' => $bestGame), 200);
 
 
    function getBestGame($games) {
