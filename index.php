@@ -1,6 +1,7 @@
 <?php
     $subPath = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? '/riskless' : '';
     $url = explode('?', $_SERVER['REQUEST_URI'])[0];
+
     $home = '1';
     $away = '2';
     $homeWinDraw = '1X';
@@ -9,6 +10,7 @@
     $anybody = '12';
     $over2 = 'Over 2.5';
     $under2 = 'Under 2.5';
+    
 
     include_once 'data.php';
 
@@ -20,7 +22,11 @@
     if ($url == '/get-data') {
         include_once 'api-get-data.php';
         exit;
+    } else if ($url == 'predict-zoom') {
+        include_once 'test.php';
     }
+
+
 
     $data = getData();
 

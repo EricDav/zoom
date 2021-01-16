@@ -1,4 +1,6 @@
 <?php
+    $GG = "GG";
+    $NG = "NG";
     function jsonResponse($responseData, $status) {
         header('Content-Type: application/json');
         header("HTTP/1.0 " . $status . " ");
@@ -28,6 +30,12 @@
     
             try {
                 $datum = $pdo->query($sql)->fetchAll();
+                foreach($datum as $d) {
+                    if ($d['home'] == $fixture->home && $d['away'] == $fixture->away) {
+                        $d['GG'] = $fixture->$GG;
+                        $d['NG'] = $fixture->$NG;
+                    }
+                }
                 $datum = array('stat' => $datum, 'fixture' => $fixture->home . ' - ' . $fixture->away);
                 // $datum['fixture'] = $fixture->home . ' - ' . $fixture->away;
             } catch(Exception $e) {
