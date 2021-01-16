@@ -1,7 +1,6 @@
 <?php 
 
    include 'Option.php';
-   include 'data.php';
    include 'Statistics.php';
    include 'Game.php';
 
