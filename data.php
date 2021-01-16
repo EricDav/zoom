@@ -30,7 +30,7 @@
     
             try {
                 $datum = $pdo->query($sql)->fetchAll();
-                for($i = 0; $i < sizeof(); $i++) {
+                for($i = 0; $i < sizeof($datum); $i++) {
                     $d = $datum[0];
                     if ($d['home'] == $fixture->home && $d['away'] == $fixture->away) {
                         $d['GG'] = $fixture->odds->$GG;
