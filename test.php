@@ -7,7 +7,7 @@
 
 //    $data = array('data' => $data, 'success' => true);
 //    $data = json_decode(json_encode($data))->data;
-   $data = json_decode(file_get_contents('s-data.json'))->data;
+ //  $data = json_decode(file_get_contents('s-data.json'))->data;
 
 //    $minOdd = $_GET['min_odd'];
 //    $maxOdd = $_GET['max_odd'];
@@ -18,26 +18,26 @@
 //        jsonResponse(array('success' => false, 'message' => 'One or more of the parameteres is invalid'), 400);
 //    }
 
-   $r = new Statistics($data);
-   $r->loadAllStat();
-   $stats = $r->stat;
-   $games = [];
+//    $r = new Statistics($data);
+//    $r->loadAllStat();
+//    $stats = $r->stat;
+//    $games = [];
 
-   for ($i = 3; $i <= 5; $i++) {
-        $matchesCominations = getDynamicMatchesCombination($stats, $i);
-        foreach($matchesCominations as $matchComb) {
-            $game = new Game($matchComb);
+//    for ($i = 3; $i <= 5; $i++) {
+//         $matchesCominations = getDynamicMatchesCombination($stats, $i);
+//         foreach($matchesCominations as $matchComb) {
+//             $game = new Game($matchComb);
 
-            if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= 3.0 && $game->getOdd() < 4) {
-                array_push($games, $game);
-            }
-        }
-   }
+//             if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= 3.0 && $game->getOdd() < 4) {
+//                 array_push($games, $game);
+//             }
+//         }
+//    }
 
    // var_dump($games); exit;
 
-   $bestGame = getBestGame($games); 
-   var_dump($bestGame);
+//    $bestGame = getBestGame($games); 
+//    var_dump($bestGame);
    
 //    jsonResponse(array('success' => true, 'data' => $bestGame), 200);
 
@@ -226,4 +226,13 @@
         $sum = (2*$a + ($n-1)*$d)*($n/2);
         return $sum;
     }
+
+
+    $a = [array('a' => 3)];
+    // $a[0]['GG'] = 2.3;
+    for($i = 0;  $i < sizeof($a); $i++) {
+        $a[$i]['GG'] = 4;
+    }
+    var_dump($a);
+
 ?>
