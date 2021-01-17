@@ -36,7 +36,7 @@
    }
 
    $bestGame = getBestGame($games); 
-   
+   p
    jsonResponse(array('success' => true, 'data' => $bestGame), 200);
 
 
@@ -44,7 +44,7 @@
       $bestGame = $games[0];
 
       foreach($games as $game) {
-          if ($game->getPoint() > $bestGame->getPoint()) {
+          if ($game->probability > $bestGame->probability) {
               $bestGame = $game;
           }
       }
