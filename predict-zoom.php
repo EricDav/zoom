@@ -44,7 +44,7 @@
       $bestGame = $games[0];
 
       foreach($games as $game) {
-          if ($game->probability > $bestGame->probability) {
+          if ($game->getPoint() > $bestGame->getPoint()) {
               $bestGame = $game;
           }
       }
