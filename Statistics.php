@@ -80,7 +80,7 @@
                         $allStat,
                         $optionObj
                     );
-                    if ($probability >= 0.7 && $totalCount >= 5) {
+                    if ($probability >= 0.7 && $totalCount >= 5 && $odd >= 1.2) {
                         array_push(
                             $this->stat,
                             $optionObj

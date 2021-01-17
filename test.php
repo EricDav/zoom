@@ -5,28 +5,28 @@
    include 'Statistics.php';
    include 'Game.php';
 
-   $data = json_decode(file_get_contents('s-data.json'))->data;
+//    $data = json_decode(file_get_contents('s-data.json'))->data;
 
-   $r = new Statistics($data);
-   $r->loadAllStat();
-   $stats = $r->stat;
-   $games = [];
+//    $r = new Statistics($data);
+//    $r->loadAllStat();
+//    $stats = $r->stat;
+//    $games = [];
 
-   for ($i = 3; $i <= 5; $i++) {
-        $matchesCominations = getDynamicMatchesCombination($stats, $i);
-        foreach($matchesCominations as $matchComb) {
-            $game = new Game($matchComb);
+//    for ($i = 3; $i <= 5; $i++) {
+//         $matchesCominations = getDynamicMatchesCombination($stats, $i);
+//         foreach($matchesCominations as $matchComb) {
+//             $game = new Game($matchComb);
 
-            if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= 4 && $game->getOdd() < 5) {
-                array_push($games, $game);
-            }
-        }
-   }
+//             if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= 4 && $game->getOdd() < 5) {
+//                 array_push($games, $game);
+//             }
+//         }
+//    }
 
-   var_dump($games);
+//    var_dump($games);
 
-   $bestGame = getBestGame($games); 
-   var_dump($bestGame); exit;
+//    $bestGame = getBestGame($games); 
+//    var_dump($bestGame); exit;
    
 //    jsonResponse(array('success' => true, 'data' => $bestGame), 200);
 
@@ -217,12 +217,9 @@
         return $sum;
     }
 
+    // 2,4,6
 
-    $a = [array('a' => 3)];
-    // $a[0]['GG'] = 2.3;
-    for($i = 0;  $i < sizeof($a); $i++) {
-        $a[$i]['GG'] = 4;
-    }
-    var_dump($a);
+
+    var_dump(sumOfAP(2, 3, 2));
 
 ?>
