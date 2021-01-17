@@ -17,6 +17,7 @@
             }
 
             $this->probability = $this->getProbabilityStat();
+            $this->odd = $this->getOdd();
         }
 
         public function isFixtureAlreadyExist($options, $fixture) {
@@ -40,19 +41,17 @@
             if (!$this->isFixtureAlreadyExist($options, $option->fixture)) {
                 array_push($this->options, $option);
                 $this->probability = $this->getProbabilityStat();
+                $this->odd = $this->getOdd();
             }
 
         }
 
         public function getOdd() {
             $odds = 1;
-           // var_dump($this->options);
             foreach($this->options as $option) {
-               // echo $option->odd; exit;
                 $odds *=(float)$option->odd;
             }
 
-           // var_dump($odds); exit;
             return $odds;
         }
 

@@ -44,9 +44,11 @@
       $bestGame = $games[0];
 
       foreach($games as $game) {
-          if ($game->probability > $bestGame->probability) {
-              $bestGame = $game;
-          }
+          // Priotize the probability of a game first. if the probability is bigger
+          // than the best game replace. But if it is the same then check whose odds is bigger
+          if ($game->probability > $bestGame->probability || ($game->probability == $bestGame->probability && $game->odd > $bestGame->odd)) {
+            $bestGame = $game;
+        }
       }
 
       return $bestGame;
