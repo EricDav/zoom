@@ -5,30 +5,30 @@
    include 'Statistics.php';
    include 'Game.php';
 
-//    $data = json_decode(file_get_contents('s-data.json'))->data;
+   $data = json_decode(file_get_contents('s-data.json'))->data;
 
-//    $r = new Statistics($data);
-//    $r->loadAllStat();
-//    $stats = $r->stat;
-//    $games = [];
+   $r = new Statistics($data);
+   $r->loadAllStat();
+   $stats = $r->stat;
+   $games = [];
 
-//    for ($i = 3; $i <= 5; $i++) {
-//         $matchesCominations = getDynamicMatchesCombination($stats, $i);
-//         foreach($matchesCominations as $matchComb) {
-//             $game = new Game($matchComb);
+   for ($i = 3; $i <= 5; $i++) {
+        $matchesCominations = getDynamicMatchesCombination($stats, $i);
+        foreach($matchesCominations as $matchComb) {
+            $game = new Game($matchComb);
 
-//             if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= 4 && $game->getOdd() < 5) {
-//                 array_push($games, $game);
-//             }
-//         }
-//    }
+            if ($game->getProbabilityStat() >= 0.6) {
+                array_push($games, $game);
+            }
+        }
+   }
 
-//    var_dump($games);
+   var_dump($games);
 
-//    $bestGame = getBestGame($games); 
-//    var_dump($bestGame); exit;
+   $bestGame = getBestOdd($games); 
+   var_dump($bestGame); exit;
    
-//    jsonResponse(array('success' => true, 'data' => $bestGame), 200);
+   jsonResponse(array('success' => true, 'data' => $bestGame), 200);
 
 
    function getBestGame($games) {
@@ -43,6 +43,19 @@
       }
       return $bestGame;
    }
+
+   function getBestOdd($games) {
+    $bestGame = $games[0];
+
+    foreach($games as $game) {
+        // Priotize the probability of a game first. if the probability is bigger
+        // than the best game replace. But if it is the same then check whose odds is bigger
+        if ($game->odd > $bestGame->odd) {
+            $bestGame = $game;
+        }
+    }
+    return $bestGame;
+ }
 
 
    function isUniqueGames($games, $game) {
@@ -220,6 +233,6 @@
     // 2,4,6
 
 
-    var_dump(sumOfAP(2, 3, 2));
+    // var_dump(sumOfAP(2, 3, 2));
 
 ?>

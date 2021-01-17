@@ -3,6 +3,8 @@
    include 'Option.php';
    include 'Statistics.php';
    include 'Game.php';
+   define('DEFAULT_MIN_MATCHES', 11);
+   define('DEFAULT_MAX_MATCHES', 12);
 
    $minOdd = $_GET['min_odd'];
    $maxOdd = $_GET['max_odd'];
@@ -14,10 +16,13 @@
    }
 
 
+
+
    $data = getData();
    $data = array('data' => $data, 'success' => true);
    $data = json_decode(json_encode($data))->data;
-    
+   $minMatches = $minMatches == DEFAULT_MIN_MATCHES ? 2 : $minMatches;
+   $maxMatches = $maxMatches == DEFAULT_MAX_MATCHES ? 7 : $maxMatches;
 
    $r = new Statistics($data);
    $r->loadAllStat();

@@ -1,5 +1,5 @@
 <?php
-    $subPath = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? '/riskless' : '';
+    $subPath = $_SERVER['HTTP_HOST'] == 'localhost:8888' ? '/zoom' : '';
     $url = explode('?', $_SERVER['REQUEST_URI'])[0];
 
     $home = '1';
@@ -24,6 +24,9 @@
         exit;
     } else if ($url == '/predict-zoom') {
         include_once 'predict-zoom.php';
+    } else if ($url == '/predict') {
+        include_once 'predict.php';
+        exit;
     }
 
 
