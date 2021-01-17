@@ -70,7 +70,7 @@ $('#predict-submit').click(function() {
     const url = '/predict-zoom?min_odd='+odd + '&max_odd=' + maxOdd + '&min_match=' + minMatch + '&max_match=' + maxMatch;
 
 
-    // $('.my-game').remove();
+    $('.my-game').remove();
     $('#empty').css('display', 'none');
     $('#predict-submit').text('Submiting...');
     $('#predict-submit').css('cursor', 'not-allowed');
