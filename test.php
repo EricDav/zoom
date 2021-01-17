@@ -6,7 +6,6 @@
    include 'Game.php';
 
    $data = json_decode(file_get_contents('s-data.json'))->data;
-    var_dump($data); exit;
 
    $r = new Statistics($data);
    $r->loadAllStat();
@@ -18,7 +17,7 @@
         foreach($matchesCominations as $matchComb) {
             $game = new Game($matchComb);
 
-            if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= 5 && $game->getOdd() < 6) {
+            if ($game->getProbabilityStat() >= 0.6 && $game->getOdd() >= 4 && $game->getOdd() < 5) {
                 array_push($games, $game);
             }
         }
@@ -27,21 +26,20 @@
    var_dump($games);
 
    $bestGame = getBestGame($games); 
-   var_dump($bestGame);
+   var_dump($bestGame); exit;
    
 //    jsonResponse(array('success' => true, 'data' => $bestGame), 200);
 
 
    function getBestGame($games) {
-       echo 'Here';
       $bestGame = $games[0];
 
       foreach($games as $game) {
-          if ($game->getPoint() > $bestGame->getPoint()) {
+          if ($game->probability > $bestGame->probability) {
               $bestGame = $game;
           }
       }
-      return $game;
+      return $bestGame;
    }
 
 

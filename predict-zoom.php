@@ -49,7 +49,7 @@
           }
       }
 
-      return $game;
+      return $bestGame;
    }
 
 
