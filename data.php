@@ -21,7 +21,6 @@
         $hr = (string)((int)$nowTime[0] + 1);
         $hr = strlen($hr) == 1 ? '0' . $hr : $hr;
         $nowTime = $hr . ':' . $nowTime[1];
-        var_dump($nowTime);
 
         if ($time && $time > $nowTime) {
             echo 'So what?';

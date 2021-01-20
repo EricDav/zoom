@@ -8,7 +8,7 @@
     // exit;
 
 
-    // playGame();
+    playGame();
 
     function play($username, $password, $minOdd, $amount, $email) {
         $predictionDataJson = json_encode(getPredictionPostData($minOdd));
