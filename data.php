@@ -6,31 +6,37 @@
         exit;
     }
 
-    function getData() {
+    function getData($returnFixtures=false) {
         $GG = "GG";
         $NG = "NG";
-        $fixtures = json_decode(file_get_contents('https://bet-odds.herokuapp.com/zoom-fixtures?country=england'))->data;
+        $over1 = "over1";
+        $under1 = "under1";
+        $over3 = "over3";
+        $under3 = "under3";
+
+        $file = file_get_contents(__DIR__ . '/../investment/saved-e-content.json');
+        $time = file_get_contents(__DIR__ . '/../investment/e-time.txt');
+
+        $nowTime = explode(':',date("H:i"));
+        $hr = (string)((int)$nowTime[0] + 1);
+        $hr = strlen($hr) == 1 ? '0' . $hr : $hr;
+        $nowTime = $hr . ':' . $nowTime[1];
+        var_dump($nowTime);
+
+        if ($time && $time > $nowTime) {
+            echo 'So what?';
+            $fixtures = json_decode($file)->data;
+        } else {
+            $jsonData = file_get_contents('https://bet-odds.herokuapp.com/zoom-fixtures?country=england');
+
+            $fixtures = json_decode($jsonData)->data;
+
+            file_put_contents(__DIR__ . '/../investment/saved-e-content.json', $jsonData);
+            file_put_contents(__DIR__ . '/../investment/e-time.txt', json_decode($jsonData)->time);
+        }
 
         $data = array();
-        try {
-            $options = [
-                PDO::ATTR_EMULATE_PREPARES   => false, // turn off emulation mode for "real" prepared statements
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //turn on errors in the form of exceptions
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
-            ];
-
-            $host = explode(':', $_SERVER['HTTP_HOST'])[0];
-
-            if ($host == 'localhost') {
-                $pdo = new PDO('mysql:host=localhost;port=8889;dbname=zoom', 'root', 'root', $options);
-            } else {
-                $pdo = new PDO('mysql:host=localhost;port=3306;dbname=wiseinve_zoom', 'wiseinve_investment', 'Iloveodunayo123', $options);
-            }
-        } catch(Exception $e) {
-            echo $e->getMessage();
-           mail('pythonboss123@gmail.com', 'Zoom Cron Job Report', 'Database connection error: ' . $e->getMessage());
-           exit(0);
-        }
+        $pdo = getPDOConnection();
     
         foreach($fixtures as $fixture) {
             $sql = 'SELECT * FROM fixtures INNER JOIN odds ON fixtures.id = odds.fixtures_id INNER JOIN results ON fixtures.id = results.fixtures_id WHERE fixtures.home =' . "'" . $fixture->home . "'" . ' AND fixtures.away = ' . "'" . $fixture->away . "'" . ' OR fixtures.home = ' . "'" . $fixture->away . "'" . ' AND fixtures.away = ' . "'" . $fixture->home . "'";
@@ -41,6 +47,10 @@
                     if ($datum[$i]['home'] == $fixture->home && $datum[$i]['away'] == $fixture->away) {
                         $datum[$i]['GG'] = $fixture->odds->$GG;
                         $datum[$i]['NG'] = $fixture->odds->$NG;
+                        $datum[$i]['over1'] = $fixture->odds->$over1;
+                        $datum[$i]['under1'] = $fixture->odds->$under1;
+                        $datum[$i]['over3'] = $fixture->odds->$over3;
+                        $datum[$i]['under3'] = $fixture->odds->$under3;
                     }
                 }
                 $datum = array('stat' => $datum, 'fixture' => $fixture->home . ' - ' . $fixture->away);

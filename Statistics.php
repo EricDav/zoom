@@ -11,6 +11,10 @@
         const GOAL_GOAL = 'GG';
         const NO_GOAL_GOAL = 'NG';
         const ANY_BODY_WIN = '12';
+        const OVER_1_POINT_5 = 'Over 1.5';
+        const UNDER_1_POINT_5 = 'Under 1.5';
+        const OVER_3_POINT_5 = 'Over 3.5';
+        const UNDER_3_POINT_5 = 'Under 3.5';
 
         const OPTIONS_NAME = array (
             '1' => 'Home',
@@ -23,6 +27,10 @@
             'GG' => 'Goal Goal',
             'NG' => 'No Goal Goal',
             '12' => 'Any body wins',
+            'Over 1.5' => null,
+            'Under 1.5' => null,
+            'Over 3.5' => null,
+            'Under 3.5' => null
         );
 
         public function __construct($data) {
@@ -41,10 +49,12 @@
                     // Statistics::HOME_DRAW => 0,
                     // Statistics::AWAY_DRAW => 0,
                     Statistics::OVER_2_POINT_5 => 0,
-                    Statistics::UNDER_2_POINT_5 => 0,
+                    // Statistics::UNDER_2_POINT_5 => 0,
                     Statistics::GOAL_GOAL => 0,
-                    Statistics::NO_GOAL_GOAL => 0,
+                    // Statistics::NO_GOAL_GOAL => 0,
                     // Statistics::ANY_BODY_WIN => 0
+                    Statistics::OVER_1_POINT_5 => 0,
+                    Statistics::UNDER_3_POINT_5 => 0,
                 );
 
                 $fixtureArr = explode(' - ', $datum->fixture);
@@ -58,7 +68,6 @@
                     if ($stat->home == $home && $stat->away == $away) {
                         if (!$refStat)
                             $refStat = $stat;
-                        // var_dump($refStat); exit;
                         
                         foreach($optionCount as $option => $count) {
                             if ($this->evaluate($stat->ft_score, $option)) {
@@ -72,7 +81,7 @@
                 // loop throup the option count
                 $allStat = array();
                 foreach($optionCount as $option => $count) {
-                    $probability = number_format($count/$totalCount, 2);
+                    $probability = $totalCount == 0 ?  0 : number_format($count/$totalCount, 2);
                     
                     $odd = $refStat->$option ? $refStat->$option : 1;
                     $optionObj = new Option($datum->fixture, $option, $odd, $totalCount, Statistics::OPTIONS_NAME[$option], $probability);
@@ -80,7 +89,7 @@
                         $allStat,
                         $optionObj
                     );
-                    if ($probability >= 0.7 && $totalCount >= 5 && $odd >= 1.2) {
+                    if ($probability >= 0.5 && $totalCount >= 5 && $odd >= 1.15) {
                         array_push(
                             $this->stat,
                             $optionObj
@@ -166,6 +175,18 @@
                     if ($awayGoal > $homeGoal || $homeGoal > $awayGoal) {
                         return true;
                     } 
+                    return false;
+                
+                case Statistics::OVER_1_POINT_5:
+                    if (($awayGoal + $homeGoal) > 1) {
+                        return true;
+                    }
+                    return false;
+
+                case Statistics::UNDER_3_POINT_5:
+                    if (($awayGoal + $homeGoal) < 4) {
+                        return true;
+                    }
                     return false;
             }
         }

@@ -11,15 +11,13 @@
     $over2 = 'Over 2.5';
     $under2 = 'Under 2.5';
 
-
-    include_once 'data.php';
-
     $competitions = array(
         1 => 'Zoom Premier League',
         2 => 'Zoom Laliga',
     );
 
     if ($url == '/get-data') {
+        include_once 'data.php';
         include_once 'api-get-data.php';
         exit;
     } else if ($url == '/predict-zoom') {
@@ -30,7 +28,7 @@
     }
 
 
-
+    include_once 'data.php';
     $data = getData();
 
    // var_dump($data);
