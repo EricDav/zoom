@@ -1,10 +1,23 @@
 <?php 
     include 'computer-prediction.php';
-    playGame();
+
+    // $time = file_get_contents('last');
+    // echo date("H:i");
+    // var_dump(gmdate("Y/m/d"));
+    // var_dump(DateTime::createFromFormat('Y/m/d H:i', gmdate("Y/m/d") . ' 08:00'));
+    // exit;
+
+
+    // playGame();
 
     function play($username, $password, $minOdd, $amount, $email) {
         $predictionDataJson = json_encode(getPredictionPostData($minOdd));
 
+        if (file_get_contents('last-time.txt') == file_get_contents('last.txt')) {
+            die('Game already played');
+        }
+
+        file_put_contents('last.txt', file_get_contents('last-time.txt'));
         if (!$predictionDataJson) {
             echo 'Did not find best game';
             mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' . date());
@@ -15,6 +28,10 @@
         $result = file_get_contents($url);
 
         return $result;
+    }
+
+    function addTime($time) {
+       // $minHr = 
     }
 
 
@@ -43,24 +60,34 @@
 
     }
 
+    function getNowTime() {
+        $nowTime = explode(':',gmdate("H:i"));
+        $hr = (string)((int)$nowTime[0] + 1);
+        $hr = strlen($hr) == 1 ? '0' . $hr : $hr;
+        $nowTime = $hr . ':' . $nowTime[1];
+
+        return $nowTime;
+    }
+
     function getPredictionPostData($minOdd) {
         $file = file_get_contents(__DIR__ . '/../investment/saved-e-content.json');
         $time = file_get_contents(__DIR__ . '/../investment/e-time.txt');
     
-        $nowTime = explode(':',date("H:i"));
-        $hr = (string)((int)$nowTime[0] + 1);
-        $hr = strlen($hr) == 1 ? '0' . $hr : $hr;
-        $nowTime = $hr . ':' . $nowTime[1];
+        $nowTime = getNowTime();
     
         if ($time > $nowTime) {
             echo 'Fool';
-            $fixtures = json_decode($file)->data;
+            $dataObj = json_decode($file);
+            $fixtures = $dataObj->data;
+            file_put_contents('last-time.txt',$dataObj->time);
+
         } else {
             $dataObj = getFixturesFromHeroku();
             $fixtures = $dataObj->data;
 
             file_put_contents(__DIR__ . '/../investment/saved-e-content.json', json_encode($dataObj));
             file_put_contents(__DIR__ . '/../investment/e-time.txt', $dataObj->time);
+            file_put_contents('last-time.txt',$dataObj->time);
         }
 
     

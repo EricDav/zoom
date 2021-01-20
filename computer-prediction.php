@@ -36,6 +36,8 @@
                 }
             }
         }
+
+        var_dump($games); exit;
         return getBestGame($games); 
     }
 
