@@ -21,7 +21,7 @@
         $predictionDataJson = json_encode($data);
         // var_dump($predictionDataJson);
         $bookingCodeDetails = fetchBookingCode(['data' => $predictionDataJson]);
-        $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $bookingCodeDetails->data->bookingCode . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents('last.txt'). "')");
+        $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $bookingCodeDetails->data->bookingCode . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents(__DIR__ . '/last.txt'). "')");
         exit(0);
         $url = 'https://bet-odds.herokuapp.com/play?bookingCode=' . $bookingCodeDetails->data->bookingCode . '&username=' . $username . '&password=' . $password . '&amount=' . $amount;
         $result = file_get_contents($url);
@@ -54,7 +54,7 @@
                 exit(0);
             } else {
                // $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Script ran succesfullly')");
-                $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $result->data . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents('last.txt'). "')");
+                $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $result->data . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents(__DIR__  . '/last.txt'). "')");
                 mail($users['email'], 'Zoom Automate Game Report', 'Game successfully played for this round at ' .  gmdate('Y-m-d H:i:s'));
             };
         }
@@ -79,7 +79,7 @@
         if ($time > $nowTime) {
             $dataObj = json_decode($file);
             $fixtures = $dataObj->data;
-            file_put_contents('last-time.txt',$dataObj->time);
+            file_put_contents(__DIR__ . '/last-time.txt',$dataObj->time);
         } else {
             $dataObj = getFixturesFromHeroku();
             $fixtures = $dataObj->data;
