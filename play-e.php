@@ -1,6 +1,6 @@
 <?php 
     include 'computer-prediction.php';
-    mail($email, 'Zoom Automate Game Report', 'I got here at ' .  gmdate('Y-m-d H:i:s'));
+    mail('pythonboss123@gmail.com', 'Zoom Automate Game Report', 'I got here at ' .  gmdate('Y-m-d H:i:s'));
     exit;
     // $time = file_get_contents('last');
     // echo date("H:i");
