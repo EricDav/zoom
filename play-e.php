@@ -19,7 +19,7 @@
         }
 
         if (file_get_contents('last-time.txt') == file_get_contents('last.txt')) {
-            $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Game already played')");
+            $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "'," . "'" . 'Game already played' . file_get_contents('last-time.txt'). '-' . file_get_contents('last.txt') . "'" . ")");
             mail($email, 'Zoom Automate Game Report', 'Game already played ' .  gmdate('Y-m-d H:i:s'));
             die('Game already played');
         }
@@ -66,7 +66,7 @@
                 mail($email, 'Zoom Automate Game Report', 'Error encountered trying to play game, it might be wrong password!' .  gmdate('Y-m-d H:i:s'));
                 exit(0);
             } else {
-                $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Script ran succesfullly')");
+               // $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Script ran succesfullly')");
                 $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $result->data . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents('last.txt'). "')");
                 mail($users['email'], 'Zoom Automate Game Report', 'Game successfully played for this round at ' .  gmdate('Y-m-d H:i:s'));
             };
