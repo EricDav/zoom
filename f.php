@@ -1,5 +1,5 @@
 <?php 
-
+    var_dump(rand(1000000000,9999999999)); exit;
    include 'Option.php';
    include 'data.php';
    include 'Statistics.php';

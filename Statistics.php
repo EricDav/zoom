@@ -49,7 +49,7 @@
                     // Statistics::HOME_DRAW => 0,
                     // Statistics::AWAY_DRAW => 0,
                     Statistics::OVER_2_POINT_5 => 0,
-                    // Statistics::UNDER_2_POINT_5 => 0,
+                    Statistics::UNDER_2_POINT_5 => 0,
                     Statistics::GOAL_GOAL => 0,
                     // Statistics::NO_GOAL_GOAL => 0,
                     // Statistics::ANY_BODY_WIN => 0
