@@ -15,7 +15,7 @@
         if (file_get_contents(__DIR__ .'/last-time.txt') == file_get_contents(__DIR__ .'/last.txt')) {
             $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "'," . "'" . 'Game already played' . file_get_contents(__DIR__ .'/last-time.txt') . '-' . file_get_contents(__DIR__ . '/last.txt') . "'" . ")");
             mail($email, 'Zoom Automate Game Report', 'Game already played ' .  gmdate('Y-m-d H:i:s'));
-            die('Game already played');
+            exit(0);
         }
 
         $predictionDataJson = json_encode($data);
@@ -76,18 +76,18 @@
     
         $nowTime = getNowTime();
     
-        if ($time > $nowTime) {
-            $dataObj = json_decode($file);
-            $fixtures = $dataObj->data;
-            file_put_contents(__DIR__ . '/last-time.txt',$dataObj->time);
-        } else {
+        // if ($time > $nowTime) {
+        //     $dataObj = json_decode($file);
+        //     $fixtures = $dataObj->data;
+        //     file_put_contents(__DIR__ . '/last-time.txt',$dataObj->time);
+        // } else {
             $dataObj = getFixturesFromHeroku();
             $fixtures = $dataObj->data;
 
             file_put_contents(__DIR__ . '/../investment/saved-e-content.json', json_encode($dataObj));
             file_put_contents(__DIR__ . '/../investment/e-time.txt', $dataObj->time);
             file_put_contents(__DIR__ .'/last-time.txt',$dataObj->time);
-        }
+       // }
 
     
         $bestGame = predict($minOdd, 5, 2, 7, 0.5);
