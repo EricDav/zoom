@@ -1,13 +1,16 @@
 <?php 
     include 'computer-prediction.php';
+    // $bookingCode = 'QFB5BT';
+    // $userId = 1;
     $pdo = getPDOConnection();
+    // $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $userId . ',' . "'" . $bookingCode . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents(__DIR__ . '/last.txt'). "')"); exit;
     $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Begining of scripts')");
     playGame();
 
     function play($username, $password, $minOdd, $amount, $email, $pdo) {
         $data = getPredictionPostData($minOdd);
         if (!$data) {
-            // mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' .  gmdate('Y-m-d H:i:s'));
+            mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' .  gmdate('Y-m-d H:i:s'));
             $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Did not find adequate game for this round')");
             exit(0);
         }
@@ -19,10 +22,7 @@
         }
 
         $predictionDataJson = json_encode($data);
-        // var_dump($predictionDataJson);
         $bookingCodeDetails = fetchBookingCode(['data' => $predictionDataJson]);
-        $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $bookingCodeDetails->data->bookingCode . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents(__DIR__ . '/last.txt'). "')");
-        exit(0);
         $url = 'https://bet-odds.herokuapp.com/play?bookingCode=' . $bookingCodeDetails->data->bookingCode . '&username=' . $username . '&password=' . $password . '&amount=' . $amount;
         $result = file_get_contents($url);
 
@@ -122,7 +122,6 @@
     function getFixturesFromHeroku() {
         for ($i = 0;  $i < 5; $i++) {
             $jsonData = file_get_contents('https://bet-odds.herokuapp.com/zoom-fixtures?country=england');
-            // var_dump($jsonData);
 
             if (!$jsonData) {
                 continue;
