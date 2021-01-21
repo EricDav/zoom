@@ -23,7 +23,7 @@
         $hr = strlen($hr) == 1 ? '0' . $hr : $hr;
         $nowTime = $hr . ':' . $nowTime[1];
 
-        if ($time && $time > $nowTime) {
+        if ($time && $time > $nowTime && file_get_contents(__DIR__ . '/env') == 'dev') {
             $fixtures = json_decode($file)->data;
         } else {
             $jsonData = file_get_contents('https://bet-odds.herokuapp.com/zoom-fixtures?country=england');

@@ -7,7 +7,7 @@
     function play($username, $password, $minOdd, $amount, $email, $pdo) {
         $data = getPredictionPostData($minOdd);
         if (!$data) {
-            mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' .  gmdate('Y-m-d H:i:s'));
+            // mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' .  gmdate('Y-m-d H:i:s'));
             $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Did not find adequate game for this round')");
             exit(0);
         }

@@ -7,7 +7,7 @@
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
             ];
 
-            $env = file_get_contents('env');
+            $env = file_get_contents(__DIR__ . '/env');
 
             if ($env == 'dev') {
                 $pdo = new PDO('mysql:host=127.0.0.1;port=8889;dbname=zoom', 'root', 'root', $options);
