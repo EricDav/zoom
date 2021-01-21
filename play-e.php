@@ -2,15 +2,12 @@
     include 'computer-prediction.php';
 
     $pdo = getPDOConnection();
-    var_dump('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Begining of scripts')"); exit;
     $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Begining of scripts')");
     // $time = file_get_contents('last');
     // echo date("H:i");
     // var_dump(gmdate("Y/m/d"));
     // var_dump(DateTime::createFromFormat('Y/m/d H:i', gmdate("Y/m/d") . ' 08:00'));
     // exit;
-
-
     playGame();
 
     function play($username, $password, $minOdd, $amount, $email, $pdo) {
