@@ -2,7 +2,8 @@
     include 'computer-prediction.php';
 
     $pdo = getPDOConnection();
-    $pdo->query('INSERT INTO logs (timestamp) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "')");
+    var_dump('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Begining of scripts')"); exit;
+    $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Begining of scripts')");
     // $time = file_get_contents('last');
     // echo date("H:i");
     // var_dump(gmdate("Y/m/d"));
@@ -12,14 +13,17 @@
 
     playGame();
 
-    function play($username, $password, $minOdd, $amount, $email) {
+    function play($username, $password, $minOdd, $amount, $email, $pdo) {
         $data = getPredictionPostData($minOdd);
         if (!$data) {
-            die('Did not find best game');
             mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' .  gmdate('Y-m-d H:i:s'));
+            $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Did not find adequate game for this round')");
+            exit(0);
         }
 
         if (file_get_contents('last-time.txt') == file_get_contents('last.txt')) {
+            $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Game already played')");
+            mail($email, 'Zoom Automate Game Report', 'Game already played ' .  gmdate('Y-m-d H:i:s'));
             die('Game already played');
         }
 
@@ -46,11 +50,11 @@
 
     function playGame() {
         $pdo = getPDOConnection();
-        $users = $pdo->query('SELECT * FROM users WHERE id=1')->fetchAll();
+        $users = $pdo->query('SELECT * FROM users')->fetchAll();
         foreach($users as $user) {
 
             for ($i = 0; $i < 3; $i++) {
-                $result = play($user['username'], $user['password'], $user['min_odds'], $user['amount'], $user['email']);
+                $result = play($user['username'], $user['password'], $user['min_odds'], $user['amount'], $user['email'], $pdo);
                 if (!$result) {
                     continue;
                 }
@@ -61,12 +65,13 @@
             $result = json_decode($result);
             
             if (!$result->success) {
+                $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Error encountered trying to play game, it might be wrong password!')");
                 mail($email, 'Zoom Automate Game Report', 'Error encountered trying to play game, it might be wrong password!' .  gmdate('Y-m-d H:i:s'));
-                echo "Error encountered trying to play game, it might be wrong password!";
+                exit(0);
             } else {
+                $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Script ran succesfullly')");
                 $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $result->data . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents('last.txt'). "')");
                 mail($users['email'], 'Zoom Automate Game Report', 'Game successfully played for this round at ' .  gmdate('Y-m-d H:i:s'));
-                echo "Success playing";
             };
         }
 
@@ -191,4 +196,6 @@
 
         return true;
     }
+
+    exit(1);
 ?>
