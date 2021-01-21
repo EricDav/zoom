@@ -1,10 +1,8 @@
 <?php 
     include 'computer-prediction.php';
+
     $pdo = getPDOConnection();
-    $user = ['id' => 1];
-    $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $result->data . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . '02:34'. "')");
-    mail('pythonboss123@gmail.com', 'Zoom Automate Game Report', 'I got here at ' .  gmdate('Y-m-d H:i:s'));
-    exit;
+    $pdo->query('INSERT INTO logs (timestamp) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "')");
     // $time = file_get_contents('last');
     // echo date("H:i");
     // var_dump(gmdate("Y/m/d"));
