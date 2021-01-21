@@ -21,8 +21,8 @@
         $predictionDataJson = json_encode($data);
         // var_dump($predictionDataJson);
         $bookingCodeDetails = fetchBookingCode(['data' => $predictionDataJson]);
-        // var_dump($bookingCodeDetails); exit;
-
+        $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $bookingCodeDetails->data->bookingCode . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents('last.txt'). "')");
+        exit(0);
         $url = 'https://bet-odds.herokuapp.com/play?bookingCode=' . $bookingCodeDetails->data->bookingCode . '&username=' . $username . '&password=' . $password . '&amount=' . $amount;
         $result = file_get_contents($url);
 
@@ -44,14 +44,7 @@
         $users = $pdo->query('SELECT * FROM users')->fetchAll();
         foreach($users as $user) {
 
-            for ($i = 0; $i < 3; $i++) {
-                $result = play($user['username'], $user['password'], $user['min_odds'], $user['amount'], $user['email'], $pdo);
-                if (!$result) {
-                    continue;
-                }
-
-                break;
-            }
+            $result = play($user['username'], $user['password'], $user['min_odds'], $user['amount'], $user['email'], $pdo);
 
             $result = json_decode($result);
             
