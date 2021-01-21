@@ -27,7 +27,7 @@
         exit;
     }
 
-
+    
     include_once 'data.php';
     $data = getData();
 

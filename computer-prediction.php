@@ -1,6 +1,4 @@
 <?php
-
-   include 'connection.php';
    include 'Option.php';
    include 'Statistics.php';
    include 'Game.php';
@@ -37,7 +35,6 @@
             }
         }
 
-        // var_dump($games); exit;
         return getBestGame($games); 
     }
 

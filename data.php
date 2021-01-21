@@ -1,4 +1,5 @@
 <?php
+    include 'connection.php';
     function jsonResponse($responseData, $status) {
         header('Content-Type: application/json');
         header("HTTP/1.0 " . $status . " ");
@@ -23,7 +24,6 @@
         $nowTime = $hr . ':' . $nowTime[1];
 
         if ($time && $time > $nowTime) {
-            echo 'So what?';
             $fixtures = json_decode($file)->data;
         } else {
             $jsonData = file_get_contents('https://bet-odds.herokuapp.com/zoom-fixtures?country=england');
@@ -46,20 +46,18 @@
                     if ($datum[$i]['home'] == $fixture->home && $datum[$i]['away'] == $fixture->away) {
                         $datum[$i]['GG'] = $fixture->odds->$GG;
                         $datum[$i]['NG'] = $fixture->odds->$NG;
-                        $datum[$i]['over1'] = $fixture->odds->$over1;
-                        $datum[$i]['under1'] = $fixture->odds->$under1;
-                        $datum[$i]['over3'] = $fixture->odds->$over3;
-                        $datum[$i]['under3'] = $fixture->odds->$under3;
+                        $datum[$i]['Over 1.5'] = $fixture->odds->$over1;
+                        $datum[$i]['Under 1.5'] = $fixture->odds->$under1;
+                        $datum[$i]['Over 3.5'] = $fixture->odds->$over3;
+                        $datum[$i]['Under 3.5'] = $fixture->odds->$under3;
                     }
                 }
                 $datum = array('stat' => $datum, 'fixture' => $fixture->home . ' - ' . $fixture->away);
-                // $datum['fixture'] = $fixture->home . ' - ' . $fixture->away;
             } catch(Exception $e) {
                 jsonResponse(['message' => 'Server error', 'success' => false], 500);
             }
 
             array_push($data, $datum);
-            // $data[$fixture->home . ' - ' . $fixture->away] = $datum;
         }
 
         return $data;

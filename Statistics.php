@@ -54,7 +54,7 @@
                     // Statistics::NO_GOAL_GOAL => 0,
                     // Statistics::ANY_BODY_WIN => 0
                     Statistics::OVER_1_POINT_5 => 0,
-                    Statistics::UNDER_3_POINT_5 => 0,
+                    // Statistics::UNDER_3_POINT_5 => 0,
                 );
 
                 $fixtureArr = explode(' - ', $datum->fixture);
@@ -63,9 +63,13 @@
                 $totalCount = 0;
                 $refStat = null;
 
+                // var_dump($datum->stat); exit;
+
+                $lastTime = null;
                 // loop through all the previous matches of a particular fixture
                 foreach($datum->stat as $stat) {
                     if ($stat->home == $home && $stat->away == $away) {
+                        $lastTime = $stat;
                         if (!$refStat)
                             $refStat = $stat;
                         
@@ -89,7 +93,10 @@
                         $allStat,
                         $optionObj
                     );
-                    if ($probability >= 0.5 && $totalCount >= 5 && $odd >= 1.15) {
+
+                    $isLast = $datum->stat[sizeof($datum->stat) - 1];
+
+                    if ($probability >= 0.7 && $totalCount >= 5 && $odd >= 1.20 && $this->evaluate($lastTime->ft_score, $option)) {
                         array_push(
                             $this->stat,
                             $optionObj
@@ -99,6 +106,10 @@
 
                 $this->allStat[$datum->fixture] = $allStat;
             }
+        }
+
+        function lastMatch($last) {
+
         }
 
         /**

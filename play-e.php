@@ -1,6 +1,7 @@
 <?php 
     include 'computer-prediction.php';
-
+    mail($email, 'Zoom Automate Game Report', 'I got here at ' .  gmdate('Y-m-d H:i:s'));
+    exit;
     // $time = file_get_contents('last');
     // echo date("H:i");
     // var_dump(gmdate("Y/m/d"));
@@ -11,21 +12,28 @@
     playGame();
 
     function play($username, $password, $minOdd, $amount, $email) {
-        $predictionDataJson = json_encode(getPredictionPostData($minOdd));
+        $data = getPredictionPostData($minOdd);
+        if (!$data) {
+            die('Did not find best game');
+            mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' .  gmdate('Y-m-d H:i:s'));
+        }
 
         if (file_get_contents('last-time.txt') == file_get_contents('last.txt')) {
             die('Game already played');
         }
 
-        file_put_contents('last.txt', file_get_contents('last-time.txt'));
-        if (!$predictionDataJson) {
-            echo 'Did not find best game';
-            mail($email, 'Zoom Automate Game Report', 'Did not find adequate game for this round at ' . date());
-        }
-
+        $predictionDataJson = json_encode($data);
+        // var_dump($predictionDataJson);
         $bookingCodeDetails = fetchBookingCode(['data' => $predictionDataJson]);
+        // var_dump($bookingCodeDetails); exit;
+
         $url = 'https://bet-odds.herokuapp.com/play?bookingCode=' . $bookingCodeDetails->data->bookingCode . '&username=' . $username . '&password=' . $password . '&amount=' . $amount;
         $result = file_get_contents($url);
+
+        if ($result && json_decode($result)->success) {
+            file_put_contents('last.txt', file_get_contents('last-time.txt'));
+        }
+
 
         return $result;
     }
@@ -37,7 +45,7 @@
 
     function playGame() {
         $pdo = getPDOConnection();
-        $users = $pdo->query('SELECT * FROM users')->fetchAll();
+        $users = $pdo->query('SELECT * FROM users WHERE id=1')->fetchAll();
         foreach($users as $user) {
 
             for ($i = 0; $i < 3; $i++) {
@@ -52,10 +60,13 @@
             $result = json_decode($result);
             
             if (!$result->success) {
+                mail($email, 'Zoom Automate Game Report', 'Error encountered trying to play game, it might be wrong password!' .  gmdate('Y-m-d H:i:s'));
                 echo "Error encountered trying to play game, it might be wrong password!";
             } else {
+                $pdo->query('INSERT INTO reports (user_id, betslip_id, date_played, game_begins) VALUES (' . $user['id'] . ',' . "'" . $result->data . "'" . ',' . "'" . gmdate('Y-m-d H:i:s') . "'" . ",'" . file_get_contents('last.txt'). "')");
+                mail($users['email'], 'Zoom Automate Game Report', 'Game successfully played for this round at ' .  gmdate('Y-m-d H:i:s'));
                 echo "Success playing";
-            }
+            };
         }
 
     }
@@ -76,11 +87,9 @@
         $nowTime = getNowTime();
     
         if ($time > $nowTime) {
-            echo 'Fool';
             $dataObj = json_decode($file);
             $fixtures = $dataObj->data;
             file_put_contents('last-time.txt',$dataObj->time);
-
         } else {
             $dataObj = getFixturesFromHeroku();
             $fixtures = $dataObj->data;
@@ -91,10 +100,10 @@
         }
 
     
-        $bestGame = predict($minOdd, 20, 2, 7);
+        $bestGame = predict($minOdd, 5, 2, 7, 0.5);
 
-        if (!$bestGame) {
-            return $bestGame;
+        if (!$bestGame || sizeof($bestGame) == 0) {
+            return null;
         }
 
         $postData = array();
