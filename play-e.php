@@ -1,13 +1,7 @@
 <?php 
     include 'computer-prediction.php';
-
     $pdo = getPDOConnection();
     $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "', 'Begining of scripts')");
-    // $time = file_get_contents('last');
-    // echo date("H:i");
-    // var_dump(gmdate("Y/m/d"));
-    // var_dump(DateTime::createFromFormat('Y/m/d H:i', gmdate("Y/m/d") . ' 08:00'));
-    // exit;
     playGame();
 
     function play($username, $password, $minOdd, $amount, $email, $pdo) {
@@ -18,8 +12,8 @@
             exit(0);
         }
 
-        if (file_get_contents('last-time.txt') == file_get_contents('last.txt')) {
-            $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "'," . "'" . 'Game already played' . file_get_contents('last-time.txt'). '-' . file_get_contents('last.txt') . "'" . ")");
+        if (file_get_contents(__DIR__ .'/last-time.txt') == file_get_contents(__DIR__ .'/last.txt')) {
+            $pdo->query('INSERT INTO logs (timestamp, message) VALUES (' . "'" . gmdate('Y-m-d H:i:s') . "'," . "'" . 'Game already played' . file_get_contents(__DIR__ .'/last-time.txt') . '-' . file_get_contents(__DIR__ . '/last.txt') . "'" . ")");
             mail($email, 'Zoom Automate Game Report', 'Game already played ' .  gmdate('Y-m-d H:i:s'));
             die('Game already played');
         }
@@ -33,7 +27,7 @@
         $result = file_get_contents($url);
 
         if ($result && json_decode($result)->success) {
-            file_put_contents('last.txt', file_get_contents('last-time.txt'));
+            file_put_contents(__DIR__ .'/last.txt', file_get_contents(__DIR__ .'/last-time.txt'));
         }
 
 
@@ -99,7 +93,7 @@
 
             file_put_contents(__DIR__ . '/../investment/saved-e-content.json', json_encode($dataObj));
             file_put_contents(__DIR__ . '/../investment/e-time.txt', $dataObj->time);
-            file_put_contents('last-time.txt',$dataObj->time);
+            file_put_contents(__DIR__ .'/last-time.txt',$dataObj->time);
         }
 
     
