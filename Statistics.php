@@ -49,7 +49,7 @@
                     // Statistics::HOME_DRAW => 0,
                     // Statistics::AWAY_DRAW => 0,
                     Statistics::OVER_2_POINT_5 => 0,
-                    Statistics::UNDER_2_POINT_5 => 0,
+                    // Statistics::UNDER_2_POINT_5 => 0,
                     Statistics::GOAL_GOAL => 0,
                     // Statistics::NO_GOAL_GOAL => 0,
                     // Statistics::ANY_BODY_WIN => 0
@@ -96,7 +96,7 @@
 
                     $isLast = $datum->stat[sizeof($datum->stat) - 1];
 
-                    if ($probability >= 0.7 && $totalCount >= 5 && $odd >= 1.20 && $this->evaluate($lastTime->ft_score, $option)) {
+                    if ($probability >= 0.7 && $totalCount >= 5 && $odd >= 1.20) {
                         array_push(
                             $this->stat,
                             $optionObj
